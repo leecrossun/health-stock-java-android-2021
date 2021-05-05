@@ -1,9 +1,9 @@
 package ddwucom.mobile.healthstock.dto;
 
 public class Exercise {
-    String kinds; // run, walk, climb
-    int minute; // 운동 시간
-    String stocksId; // 단위 주가 ID (하루단위)
+    private String kinds; // run, walk, climb
+    private int minute; // 운동 시간
+    private String stocksId; // 단위 주가 ID (하루단위)
 
     public String getKinds() {
         return kinds;
