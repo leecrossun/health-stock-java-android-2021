@@ -1,6 +1,9 @@
 package ddwucom.mobile.healthstock;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -11,6 +14,9 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Intent intent;
+    private Button btn_position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +32,16 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        //jiwoo hello~~
+        Button btn_position = (Button) findViewById(R.id.btn_position);
+    }
+
+    public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.btn_position:
+                intent = new Intent(this, PositionActivity.class);
+                startActivity(intent);
+                break;
+        }
     }
 
 }
