@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -68,13 +70,14 @@ public class MainActivity extends AppCompatActivity {
         // set data
         chart.setData(data);
 
-        // 측정 페이지로 이동
-        Button position = findViewById(R.id.btn_position);
-        position.setOnClickListener(new View.OnClickListener() {
+        // 사용자 페이지로 이동
+        ImageView user = (ImageView) findViewById(R.id.userProfile);
+        user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), PositionActivity.class);
-                startActivity(intent);
+                Toast.makeText(MainActivity.this,"사용자 화면으로 이동합니다.", Toast.LENGTH_SHORT).show();
+                Intent userIntent = new Intent(MainActivity.this, UserActivity.class);
+                startActivity(userIntent);
             }
         });
     }
@@ -83,15 +86,14 @@ public class MainActivity extends AppCompatActivity {
         switch(v.getId()){
             case R.id.btn_heart:
                 Toast.makeText(MainActivity.this,"심박수 측정화면으로 이동합니다.", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainActivity.this, HeartrateActivity.class);
-                startActivity(intent);
+                Intent heart_intent = new Intent(MainActivity.this, HeartrateActivity.class);
+                startActivity(heart_intent);
                 break;
-            case R.id.userName:
-            case R.id.userProfile:
-                Toast.makeText(MainActivity.this,"사용자 화면으로 이동합니다.", Toast.LENGTH_SHORT).show();
-                Intent userIntent = new Intent(MainActivity.this, UserActivity.class);
-                startActivity(userIntent);
+            case R.id.btn_position:
+                Intent position_intent = new Intent(getApplicationContext(), PositionActivity.class);
+                startActivity(position_intent);
                 break;
+
 
         }
     }
