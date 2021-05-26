@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
+        // 건강 주식 그래프
         chart = findViewById(R.id.linechart);
 
         ArrayList<Entry> values = new ArrayList<>();
@@ -66,6 +67,16 @@ public class MainActivity extends AppCompatActivity {
 
         // set data
         chart.setData(data);
+
+        // 측정 페이지로 이동
+        Button position = findViewById(R.id.btn_position);
+        position.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), PositionActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void onClick(View v){
