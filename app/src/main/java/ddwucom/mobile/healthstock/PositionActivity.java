@@ -28,8 +28,8 @@ public class PositionActivity extends AppCompatActivity {
             Toast.makeText(this, "측정 종료", Toast.LENGTH_SHORT).show();
             // 결과 다이얼로그 띄우기
 //            AlertDialog.Builder dlg = new AlertDialog.Builder(PositionActivity.this);
-            intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+//            intent = new Intent(this, MainActivity.class);
+//            startActivity(intent);
             finish();
         }
     }
