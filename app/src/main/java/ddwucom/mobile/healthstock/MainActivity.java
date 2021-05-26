@@ -68,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
         chart.setData(data);
 
         // 측정 페이지로 이동
-        Button exercise = findViewById(R.id.btn_position);
-        exercise.setOnClickListener(new View.OnClickListener() {
+        Button position = findViewById(R.id.btn_position);
+        position.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), PositionActivity.class);
