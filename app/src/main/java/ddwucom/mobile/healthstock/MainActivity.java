@@ -90,7 +90,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(heart_intent);
                 break;
             case R.id.btn_position:
-                Intent position_intent = new Intent(getApplicationContext(), PositionActivity.class);
+                Toast.makeText(MainActivity.this,"자세 측정화면으로 이동합니다.", Toast.LENGTH_SHORT).show();
+                Intent position_intent = new Intent(MainActivity.this, PositionActivity.class);
                 startActivity(position_intent);
                 break;
 
