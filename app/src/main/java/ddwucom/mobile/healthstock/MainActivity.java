@@ -1,9 +1,11 @@
 package ddwucom.mobile.healthstock;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -64,6 +66,16 @@ public class MainActivity extends AppCompatActivity {
 
         // set data
         chart.setData(data);
+    }
+
+    public void onClick(View v){
+        switch(v.getId()){
+            case R.id.btn_heart:
+                Toast.makeText(MainActivity.this,"심박수 측정화면으로 이동합니다.", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, HeartrateActivity.class);
+                startActivity(intent);
+                break;
+        }
     }
 
 
