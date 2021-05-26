@@ -75,6 +75,13 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, HeartrateActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.userName:
+            case R.id.userProfile:
+                Toast.makeText(MainActivity.this,"사용자 화면으로 이동합니다.", Toast.LENGTH_SHORT).show();
+                Intent userIntent = new Intent(MainActivity.this, UserActivity.class);
+                startActivity(userIntent);
+                break;
+
         }
     }
 
