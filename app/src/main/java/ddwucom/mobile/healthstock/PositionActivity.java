@@ -24,6 +24,4 @@ public class PositionActivity extends AppCompatActivity {
             Toast.makeText(this, "측정 종료", Toast.LENGTH_SHORT).show();
         }
     }
-
-
 }
