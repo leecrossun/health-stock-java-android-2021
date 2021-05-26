@@ -8,13 +8,13 @@
     android:paddingTop="?attr/actionBarSize">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/main_userName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
-        android:text="TextView"
+        android:text="동솜님"
         app:layout_constraintEnd_toStartOf="@+id/imageView"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,8 +29,8 @@
         tools:srcCompat="@color/purple_700" />
 
     <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
+        android:id="@+id/myName"
+        android:layout_width="95dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="90dp"
         android:layout_marginLeft="90dp"
@@ -40,12 +40,12 @@
         android:paddingTop="30px"
         android:paddingRight="60px"
         android:paddingBottom="30px"
-        android:text="TextView"
+        android:text="김동솜"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/nav_host_fragment" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/myStock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
@@ -56,7 +56,7 @@
         android:paddingTop="30px"
         android:paddingRight="50px"
         android:paddingBottom="30px"
-        android:text="TextView"
+        android:text="81,400"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/nav_host_fragment" />
 
@@ -67,7 +67,9 @@
         android:layout_marginTop="170dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/nav_host_fragment" />
+        app:layout_constraintTop_toTopOf="@+id/nav_host_fragment" >
+
+    </com.github.mikephil.charting.charts.LineChart>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
@@ -94,25 +96,27 @@
         app:navGraph="@navigation/mobile_navigation" />
 
     <Button
-        android:id="@+id/btn_position"
+        android:id="@+id/btn_exercise"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="90dp"
+        android:layout_marginLeft="90dp"
         android:layout_marginBottom="100dp"
         android:onClick="onClick"
-        android:text="Button"
+        android:text="운동"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/btn_heart"
+        android:id="@+id/btn_position"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:onClick="onClick"
-        android:text="운동"
-        app:layout_constraintBottom_toTopOf="@+id/btn_position"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginEnd="90dp"
+        android:layout_marginRight="90dp"
+        android:layout_marginBottom="100dp"
+        android:text="자세"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
