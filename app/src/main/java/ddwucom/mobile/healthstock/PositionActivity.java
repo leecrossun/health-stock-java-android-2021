@@ -2,6 +2,7 @@ package ddwucom.mobile.healthstock;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -25,7 +26,9 @@ public class PositionActivity extends AppCompatActivity {
             Toast.makeText(this, "측정 시작", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "측정 종료", Toast.LENGTH_SHORT).show();
-//            intent = new Intent(this, .class);
+            // 결과 다이얼로그 띄우기
+//            AlertDialog.Builder dlg = new AlertDialog.Builder(PositionActivity.this);
+            intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
         }
