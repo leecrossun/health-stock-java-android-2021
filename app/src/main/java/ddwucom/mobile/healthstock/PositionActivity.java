@@ -1,9 +1,10 @@
 package ddwucom.mobile.healthstock;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ public class PositionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_position);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     public void onClick(View v) {
         boolean on = ((ToggleButton) v).isChecked();
         
@@ -33,4 +35,5 @@ public class PositionActivity extends AppCompatActivity {
             finish();
         }
     }
+
 }
