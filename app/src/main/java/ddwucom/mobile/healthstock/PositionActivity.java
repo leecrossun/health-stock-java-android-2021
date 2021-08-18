@@ -1,9 +1,10 @@
 package ddwucom.mobile.healthstock;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -94,8 +95,6 @@ public class PositionActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
-
     public void onClick(View v) {
         boolean on = ((ToggleButton) v).isChecked();
         if (on) {
@@ -112,4 +111,5 @@ public class PositionActivity extends AppCompatActivity {
             finish();
         }
     }
+
 }
