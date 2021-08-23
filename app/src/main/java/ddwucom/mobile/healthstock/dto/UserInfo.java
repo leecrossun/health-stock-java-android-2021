@@ -6,6 +6,15 @@ public class UserInfo {
     private double height;
     private double weight;
 
+    public UserInfo() { }
+
+    public UserInfo(String userName, int point, double height, double weight) {
+        this.userName = userName;
+        this.point = point;
+        this.height = height;
+        this.weight = weight;
+    }
+
     public void setUserName(String username){
         this.userName = username;
     }

@@ -1,17 +1,23 @@
 package ddwucom.mobile.healthstock.dto;
 
 public class Exercise {
-    private String kinds; // run, walk, climb
+//    private String kinds; // run, walk, climb
     private int minute; // 운동 시간
-    private String stocksId; // 단위 주가 ID (하루단위)
+    private int stocksId; // 단위 주가 ID (하루단위)
+    private int price;
 
-    public String getKinds() {
-        return kinds;
+    public Exercise(int price, int stocksId) {
+        this.price = price;
+        this.stocksId = stocksId;
     }
 
-    public void setKinds(String kinds) {
-        this.kinds = kinds;
-    }
+    //    public String getKinds() {
+//        return kinds;
+//    }
+//
+//    public void setKinds(String kinds) {
+//        this.kinds = kinds;
+//    }
 
     public int getMinute() {
         return minute;
@@ -21,11 +27,19 @@ public class Exercise {
         this.minute = minute;
     }
 
-    public String getStocksId() {
+    public int getStocksId() {
         return stocksId;
     }
 
-    public void setStocksId(String stocksId) {
+    public void setStocksId(int stocksId) {
         this.stocksId = stocksId;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 }

@@ -16,7 +16,9 @@ import com.github.mikephil.charting.charts.Chart;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 public abstract class DemoBase extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
@@ -39,14 +41,12 @@ public abstract class DemoBase extends AppCompatActivity implements ActivityComp
         return (float) (Math.random() * range) + start;
     }
 
-    public void initString() {
-        Calendar calendar = new GregorianCalendar();
+    public void initString(ArrayList<Date> dateList) {
         SimpleDateFormat format = new SimpleDateFormat( "MM/dd");
 
         for (int i = 0; i < 5; i++) {
-            String chkDate = format.format(calendar.getTime());
-            dates[4 - i] = chkDate;
-            calendar.add(Calendar.DATE, -1);
+            String chkDate = format.format(dateList.get(i));
+            dates[i] = chkDate;
         }
     }
 

@@ -1,6 +1,8 @@
 package ddwucom.mobile.healthstock;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,12 +37,28 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import ddwucom.mobile.healthstock.DemoBase;
+import ddwucom.mobile.healthstock.dto.Exercise;
+import ddwucom.mobile.healthstock.dto.Position;
+import ddwucom.mobile.healthstock.dto.Stocks;
+import ddwucom.mobile.healthstock.dto.UserInfo;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 
 public class MainActivity extends DemoBase {
 
     private CombinedChart chart;
     private final int count = 5;
+
+    private SQLiteDatabase db;
+    private HealthStocksDBHelper helper;
+    private Cursor cursor;
+
+    private ArrayList<Stocks> stocksList = new ArrayList<>();
+    private ArrayList<Position> positionList = new ArrayList<>();
+    private ArrayList<Exercise> exerciseList = new ArrayList<>();
+    private UserInfo userInfo = new UserInfo("name2", 500, 155, 50);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +74,8 @@ public class MainActivity extends DemoBase {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
+        helper = new HealthStocksDBHelper(MainActivity.this);
+
         // 프로필 클릭시 사용자 페이지로 이동
         ImageView user = (ImageView) findViewById(R.id.userProfile);
         user.setOnClickListener(new View.OnClickListener() {
@@ -69,7 +89,7 @@ public class MainActivity extends DemoBase {
 
         // 건강 주식 그래프
         setTitle("CombinedChartActivity");
-        initString();
+        setLists();
 
         chart = findViewById(R.id.chart1);
         chart.getDescription().setEnabled(false);
@@ -142,9 +162,8 @@ public class MainActivity extends DemoBase {
         LineData d = new LineData();
 
         ArrayList<Entry> entries = new ArrayList<>();
-
         for (int index = 0; index < count; index++)
-            entries.add(new Entry(index + 0.5f, getRandom(1000, 500)));
+            entries.add(new Entry(index + 0.5f, stocksList.get(index).getSharePrice()));
 
         LineDataSet set = new LineDataSet(entries, "건강 주가");
         set.setColor(Color.rgb(160, 155, 183));
@@ -165,14 +184,12 @@ public class MainActivity extends DemoBase {
 
     private BarData generateBarData() {
 
-        ArrayList<BarEntry> entries1 = new ArrayList<>();
-        ArrayList<BarEntry> entries2 = new ArrayList<>();
+        ArrayList<BarEntry> entries1 = new ArrayList<>(); //운동
+        ArrayList<BarEntry> entries2 = new ArrayList<>(); //자세
 
         for (int index = 0; index < count; index++) {
-            entries1.add(new BarEntry(0, getRandom(100, 25)));
-
-            // stacked
-            entries2.add(new BarEntry(0, getRandom(50, 10)));
+            entries1.add(new BarEntry(0, exerciseList.get(index).getPrice()));
+            entries2.add(new BarEntry(0, positionList.get(index).getPrice()));
         }
 
         //운동
@@ -207,4 +224,57 @@ public class MainActivity extends DemoBase {
     @Override
     protected void saveToGallery() { /* Intentionally left empty */ }
 
+    protected void setLists() {
+        db = helper.getReadableDatabase();
+        cursor = db.rawQuery("select * from " + HealthStocksDBHelper.TABLE_STOCKS
+                + " where " + HealthStocksDBHelper.COL_USERNAME + "='" + userInfo.getUserName()
+                + "' order by " + HealthStocksDBHelper.COL_ID + " desc limit 5", null);
+
+        while (cursor.moveToNext()) {
+            stocksList.add(new Stocks(
+                    cursor.getInt(cursor.getColumnIndex(HealthStocksDBHelper.COL_ID)),
+                    userInfo,
+                    cursor.getInt(cursor.getColumnIndex(HealthStocksDBHelper.COL_DATE)),
+                    cursor.getInt(cursor.getColumnIndex(HealthStocksDBHelper.COL_SHAREPRICE))
+            ));
+        }
+        Log.d("MainActivity", "stocklist size: " + stocksList.size());
+        Collections.reverse(stocksList);
+
+        // 차트 날짜 설정
+        ArrayList<Date> dateList = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            dateList.add(stocksList.get(i).getDate());
+        }
+        initString(dateList);
+
+        for (int i = 0; i < count; i++) {
+            cursor = db.rawQuery("select * from " + HealthStocksDBHelper.TABLE_HEALTH
+                    + " where " + HealthStocksDBHelper.COL_STOCKSID + "=" + String.valueOf(stocksList.get(i).getStocksId()), null);
+            while (cursor.moveToNext()) {
+                String type = cursor.getString(cursor.getColumnIndex(HealthStocksDBHelper.COL_TYPE));
+                int stocksId = cursor.getInt(cursor.getColumnIndex(HealthStocksDBHelper.COL_STOCKSID));
+                if (type.equals("position")) {
+                    positionList.add(new Position(
+                            cursor.getInt(cursor.getColumnIndex(HealthStocksDBHelper.COL_RESULT)),
+                            stocksId
+                    ));
+                } else if (type.equals("exercise")) {
+                    exerciseList.add(new Exercise(
+                            cursor.getInt(cursor.getColumnIndex(HealthStocksDBHelper.COL_RESULT)),
+                            stocksId
+                    ));
+                }
+            }
+            if (positionList.size() <= i) {
+                positionList.add(new Position(0, stocksList.get(i).getStocksId()));
+            }
+            if (exerciseList.size() <= i) {
+                exerciseList.add(new Exercise(0, stocksList.get(i).getStocksId()));
+            }
+        }
+
+        cursor.close();
+        helper.close();
+    }
 }
