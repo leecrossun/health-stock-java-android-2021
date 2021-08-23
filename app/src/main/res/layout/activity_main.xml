@@ -30,71 +30,57 @@
         tools:srcCompat="@color/purple_700" />
 
     <TextView
-        android:id="@+id/myName"
-        android:layout_width="95dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="90dp"
-        android:layout_marginLeft="90dp"
-        android:layout_marginTop="80dp"
-        android:background="#ECECEC"
-        android:paddingLeft="40px"
-        android:paddingTop="30px"
-        android:paddingRight="60px"
-        android:paddingBottom="30px"
-        android:text="김동솜"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/nav_host_fragment" />
-
-    <TextView
         android:id="@+id/myStock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="90dp"
-        android:layout_marginRight="90dp"
-        android:background="#ECECEC"
+        android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"
         android:paddingLeft="50px"
         android:paddingTop="30px"
         android:paddingRight="50px"
         android:paddingBottom="30px"
-        android:text="81,400"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/nav_host_fragment" />
+        android:text="81,400원"
+        android:textColor="#673AB7"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/linechart"
-        android:layout_width="358dp"
-        android:layout_height="280dp"
-        android:layout_marginTop="170dp"
+    <com.github.mikephil.charting.charts.CombinedChart
+        android:id="@+id/chart1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_heart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/nav_host_fragment" >
+        app:layout_constraintTop_toBottomOf="@+id/myStock">
 
-    </com.github.mikephil.charting.charts.LineChart>
+        <fragment
+            android:id="@+id/nav_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="409dp"
+            android:layout_height="729dp"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/mobile_navigation" />
+    </com.github.mikephil.charting.charts.CombinedChart>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="4dp"
         android:background="?android:attr/windowBackground"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_nav_menu" />
-
-    <fragment
-        android:id="@+id/nav_host_fragment"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:defaultNavHost="true"
-        app:layout_constraintBottom_toTopOf="@id/nav_view"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navGraph="@navigation/mobile_navigation" />
 
     <Button
         android:id="@+id/btn_position"
@@ -102,7 +88,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="90dp"
         android:layout_marginRight="90dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="70dp"
         android:onClick="onClick"
         android:text="자세"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -114,7 +100,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="90dp"
         android:layout_marginLeft="90dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="70dp"
         android:onClick="onClick"
         android:text="운동"
         app:layout_constraintBottom_toBottomOf="parent"
