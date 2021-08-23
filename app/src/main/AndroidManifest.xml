@@ -18,6 +18,7 @@
         <activity android:name=".HeartrateActivity"/>
         <activity android:name=".PositionActivity" />
         <activity android:name=".UserActivity" />
+        <activity android:name=".WalkActivity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">

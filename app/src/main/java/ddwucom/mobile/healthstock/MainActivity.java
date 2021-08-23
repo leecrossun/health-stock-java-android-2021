@@ -86,9 +86,9 @@ public class MainActivity extends AppCompatActivity {
     public void onClick(View v){
         switch(v.getId()){
             case R.id.btn_heart:
-                Toast.makeText(MainActivity.this,"심박수 측정화면으로 이동합니다.", Toast.LENGTH_SHORT).show();
-                Intent heart_intent = new Intent(MainActivity.this, HeartrateActivity.class);
-                startActivity(heart_intent);
+                Toast.makeText(MainActivity.this,"걸음 측정화면으로 이동합니다.", Toast.LENGTH_SHORT).show();
+                Intent walk_intent = new Intent(MainActivity.this, WalkActivity.class);
+                startActivity(walk_intent);
                 break;
             case R.id.btn_position:
                 Toast.makeText(MainActivity.this,"자세 측정화면으로 이동합니다.", Toast.LENGTH_SHORT).show();
