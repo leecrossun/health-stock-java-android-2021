@@ -85,7 +85,7 @@ public class PositionActivity extends AppCompatActivity {
                     }).start();
                     Log.d("socket", "input: " + data);
 
-                    saveOrUpdate(data);
+                    //saveOrUpdate(data);
 
                     OutputStream out = socket.getOutputStream();
                     PrintWriter writer = new PrintWriter(out, true);
@@ -122,6 +122,7 @@ public class PositionActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
     public void onClick(View v) {
         boolean on = ((ToggleButton) v).isChecked();
         if (on) {
