@@ -13,6 +13,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,6 +21,9 @@ import android.widget.Toast;
 
 public class WalkActivity extends AppCompatActivity implements SensorEventListener {
 
+
+public class WalkActivity extends AppCompatActivity implements SensorEventListener {
+  
     SensorManager sensorManager;
     Sensor stepCountSensor;
     TextView stepCountView;
@@ -74,7 +78,6 @@ public class WalkActivity extends AppCompatActivity implements SensorEventListen
                 finish();
             }
         });
-
     }
 
     @Override
@@ -88,10 +91,12 @@ public class WalkActivity extends AppCompatActivity implements SensorEventListen
                 stepCountView.setText(String.valueOf(currentSteps));
             }
         }
+        Log.d(TAG,String.valueOf(event.values[0])+" 값, "+event.sensor.getName()+" 센서");
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
+        Log.d(TAG,"onAccuracyChanged 안");
     }
+
 }
