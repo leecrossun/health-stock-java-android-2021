@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -30,6 +31,8 @@ public class WalkActivity extends AppCompatActivity implements SensorEventListen
 
     // 현재 걸음 수
     int currentSteps = 0;
+
+    Intent intent = getIntent();
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
@@ -72,6 +75,9 @@ public class WalkActivity extends AppCompatActivity implements SensorEventListen
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                intent.putExtra("steps", currentSteps);
+                intent.putExtra("steps_to_point", StepsToPoint(currentSteps));
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });
@@ -94,4 +100,8 @@ public class WalkActivity extends AppCompatActivity implements SensorEventListen
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
 
+    //1000 보 == 100 point
+    public int StepsToPoint(int currentSteps){
+        return (currentSteps / 1000) * 100;
+    }
 }

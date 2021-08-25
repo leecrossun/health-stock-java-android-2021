@@ -46,6 +46,8 @@ public class PositionActivity extends AppCompatActivity {
 
         //db
         helper = new HealthStocksDBHelper(PositionActivity.this);
+
+        intent = getIntent();
     }
     
     protected void saveOrUpdate() {
@@ -58,9 +60,6 @@ public class PositionActivity extends AppCompatActivity {
         db = helper.getReadableDatabase();
         cursor = db.rawQuery("select * from " + HealthStocksDBHelper.TABLE_STOCKS
                 + " where " + HealthStocksDBHelper.COL_DATE + "=" + date, null);
-
-
-
         return id;
     }
 
@@ -149,6 +148,8 @@ public class PositionActivity extends AppCompatActivity {
 //            AlertDialog.Builder dlg = new AlertDialog.Builder(PositionActivity.this);
 //            intent = new Intent(this, MainActivity.class);
 //            startActivity(intent);
+            intent.putExtra("position", Integer.parseInt(textView.getText().toString()));
+            setResult(RESULT_OK, intent);
             finish();
         }
     }
