@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -13,13 +14,16 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class WalkActivity extends AppCompatActivity implements SensorEventListener {
+import java.util.Date;
 
+public class WalkActivity extends AppCompatActivity implements SensorEventListener {
+  
     SensorManager sensorManager;
     Sensor stepCountSensor;
     TextView stepCountView;
@@ -29,6 +33,11 @@ public class WalkActivity extends AppCompatActivity implements SensorEventListen
 
     // 현재 걸음 수
     int currentSteps = 0;
+
+    Intent intent = getIntent();
+
+    Date startTime;
+    Date endTime;
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
@@ -62,6 +71,7 @@ public class WalkActivity extends AppCompatActivity implements SensorEventListen
             public void onClick(View v) {
                 if(stepCountSensor !=null) {
                     Toast.makeText(WalkActivity.this,"걸음 측정 시작",Toast.LENGTH_SHORT).show();
+                    startTime = new Date();
                     sensorManager.registerListener(WalkActivity.this,stepCountSensor,SensorManager.SENSOR_DELAY_FASTEST);
                 }
             }
@@ -71,10 +81,16 @@ public class WalkActivity extends AppCompatActivity implements SensorEventListen
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                endTime = new Date();
+                long minute = (endTime.getTime() - startTime.getTime())/60000;
+
+                intent.putExtra("minute", (int)minute);
+                intent.putExtra("steps", currentSteps);
+                intent.putExtra("steps_to_point", StepsToPoint(currentSteps));
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });
-
     }
 
     @Override
@@ -92,6 +108,10 @@ public class WalkActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
 
+    //1000 보 == 100 point
+    public int StepsToPoint(int currentSteps){
+        return (currentSteps / 1000) * 100;
     }
 }

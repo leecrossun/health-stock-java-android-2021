@@ -21,6 +21,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Date;
 
 public class PositionActivity extends AppCompatActivity {
 
@@ -34,6 +35,9 @@ public class PositionActivity extends AppCompatActivity {
     private HealthStocksDBHelper helper;
     private Cursor cursor;
 
+    Date startTime;
+    Date endTime;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,8 +47,9 @@ public class PositionActivity extends AppCompatActivity {
         toggleButton = findViewById(R.id.togglePosition);
         textView = findViewById(R.id.data);
         handler = new Handler();
+        intent = getIntent();
     }
-
+  
     class ServerThread extends Thread {
         @Override
         public void run() {
@@ -120,16 +125,20 @@ public class PositionActivity extends AppCompatActivity {
     public void onClick(View v) {
         boolean on = ((ToggleButton) v).isChecked();
         if (on) {
+            startTime = new Date();
             ServerThread thread = new ServerThread();
             Log.d("test", "onclick is on");
             thread.start();
             Toast.makeText(this, "측정 시작", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "측정 종료", Toast.LENGTH_SHORT).show();
-            // 결과 다이얼로그 띄우기
-//            AlertDialog.Builder dlg = new AlertDialog.Builder(PositionActivity.this);
-//            intent = new Intent(this, MainActivity.class);
-//            startActivity(intent);
+            endTime = new Date();
+
+            long minute = (endTime.getTime() - startTime.getTime())/60000;
+
+            intent.putExtra("position", Integer.parseInt(textView.getText().toString()));
+            intent.putExtra("minute", (int)minute);
+            setResult(RESULT_OK, intent);
             finish();
         }
     }
