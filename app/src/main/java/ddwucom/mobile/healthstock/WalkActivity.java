@@ -20,6 +20,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Date;
+
 public class WalkActivity extends AppCompatActivity implements SensorEventListener {
   
     SensorManager sensorManager;
@@ -33,6 +35,9 @@ public class WalkActivity extends AppCompatActivity implements SensorEventListen
     int currentSteps = 0;
 
     Intent intent = getIntent();
+
+    Date startTime;
+    Date endTime;
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
@@ -66,6 +71,7 @@ public class WalkActivity extends AppCompatActivity implements SensorEventListen
             public void onClick(View v) {
                 if(stepCountSensor !=null) {
                     Toast.makeText(WalkActivity.this,"걸음 측정 시작",Toast.LENGTH_SHORT).show();
+                    startTime = new Date();
                     sensorManager.registerListener(WalkActivity.this,stepCountSensor,SensorManager.SENSOR_DELAY_FASTEST);
                 }
             }
@@ -75,6 +81,10 @@ public class WalkActivity extends AppCompatActivity implements SensorEventListen
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                endTime = new Date();
+                long minute = (endTime.getTime() - startTime.getTime())/60000;
+
+                intent.putExtra("minute", (int)minute);
                 intent.putExtra("steps", currentSteps);
                 intent.putExtra("steps_to_point", StepsToPoint(currentSteps));
                 setResult(RESULT_OK, intent);
