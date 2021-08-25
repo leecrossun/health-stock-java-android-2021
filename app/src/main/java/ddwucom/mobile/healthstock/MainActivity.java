@@ -238,7 +238,6 @@ public class MainActivity extends DemoBase {
                     cursor.getInt(cursor.getColumnIndex(HealthStocksDBHelper.COL_SHAREPRICE))
             ));
         }
-        Log.d("MainActivity", "stocklist size: " + stocksList.size());
         Collections.reverse(stocksList);
 
         // 차트 날짜 설정
