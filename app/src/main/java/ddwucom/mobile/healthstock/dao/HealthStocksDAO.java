@@ -94,11 +94,11 @@ public class HealthStocksDAO {
         return exercise;
     }
 
-    public boolean saveOrUpdate(int stockId, Position position) {
+    public boolean saveOrUpdate(Position position) {
         // stock id && type에 해당하는 health가 있는지 보고 있으면 update 없으면 새로 save
         SQLiteDatabase db = helper.getWritableDatabase();
         cursor = db.rawQuery("select * from " + HealthStocksDBHelper.TABLE_HEALTH
-                + " where " + HealthStocksDBHelper.COL_STOCKSID + "=" + stockId
+                + " where " + HealthStocksDBHelper.COL_STOCKSID + "=" + position.getStockId()
                 + " and " + HealthStocksDBHelper.COL_TYPE + "='position'", null);
 
         ContentValues value = new ContentValues();
@@ -123,7 +123,36 @@ public class HealthStocksDAO {
         return false;
     }
 
-    public int getTodayStockId(String username, int date) {
+    public boolean saveOrUpdate(Exercise exercise) {
+        // stock id && type에 해당하는 health가 있는지 보고 있으면 update 없으면 새로 save
+        SQLiteDatabase db = helper.getWritableDatabase();
+        cursor = db.rawQuery("select * from " + HealthStocksDBHelper.TABLE_HEALTH
+                + " where " + HealthStocksDBHelper.COL_STOCKSID + "=" + exercise.getStocksId()
+                + " and " + HealthStocksDBHelper.COL_TYPE + "='exercise'", null);
+
+        ContentValues value = new ContentValues();
+        value.put(HealthStocksDBHelper.COL_TYPE, "exercise");
+        value.put(HealthStocksDBHelper.COL_MINUTE, exercise.getMinute());
+        value.put(HealthStocksDBHelper.COL_RESULT, exercise.getPrice());
+        value.put(HealthStocksDBHelper.COL_STOCKSID, exercise.getStocksId());
+
+        int result = -1; long count = -1;
+        if (cursor.moveToNext()) { //있으면
+            int id = cursor.getInt(cursor.getColumnIndex(HealthStocksDBHelper.COL_ID));
+            String whereClause = HealthStocksDBHelper.COL_ID + "=?";
+            String[] whereArgs = new String[] {String.valueOf(id)};
+            result = db.update(HealthStocksDBHelper.TABLE_HEALTH, value, whereClause, whereArgs);
+        } else { //없으면
+            count = db.insert(HealthStocksDBHelper.TABLE_HEALTH, null, value);
+        }
+
+        helper.close();
+        cursor.close();
+        if (count > 0 || result > 0) return true;
+        return false;
+    }
+
+    protected int getTodayStockId(String username, int date) {
         //오늘 날짜에 해당하는 stock이 있는지 보고 있으면 id return, 없으면 만들고 id return
         SQLiteDatabase db = helper.getWritableDatabase();
         cursor = db.rawQuery("select " + HealthStocksDBHelper.COL_ID + " from " + HealthStocksDBHelper.TABLE_STOCKS
