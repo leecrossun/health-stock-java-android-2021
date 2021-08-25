@@ -41,7 +41,7 @@ public class HealthStocksDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table " + TABLE_USERINFO + " ( " + COL_USERNAME + " TEXT primary key,"
-                + COL_POINT + " integer, " + COL_HEIGHT + " integer, " + COL_WEIGHT + " integer, " + COL_AGE + " integer);");
+                + COL_POINT + " integer, " + COL_HEIGHT + " real, " + COL_WEIGHT + " real, " + COL_AGE + " integer);");
 
         db.execSQL("create table " + TABLE_STOCKS + " ( " + COL_ID + " integer primary key autoincrement,"
                 + COL_USERNAME + " TEXT, " + COL_DATE + " integer, " + COL_SHAREPRICE + " integer, "

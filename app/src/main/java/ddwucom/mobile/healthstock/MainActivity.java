@@ -99,7 +99,7 @@ public class MainActivity extends DemoBase {
 
         //리스트 설정
         dao = new HealthStocksDAO(MainActivity.this);
-        stocksList = dao.getAllStocks(userInfo);
+        stocksList = dao.getAllStocks(userInfo.getUserName());
         for (int i = 0; i < count; i++) {
             int sId = stocksList.get(i).getStocksId();
 
@@ -292,7 +292,7 @@ public class MainActivity extends DemoBase {
 
                     Exercise exercise = dao.getExercise(stocksId);
                     Exercise new_exercise = new Exercise(steps_to_point + exercise.getPrice(), stocksId, minute + exercise.getMinute());
-                    dao.saveOrUpdate(new_exercise);
+                    dao.saveOrUpdate(new_exercise, steps_to_point);
                 }
                 break;
             case Position_Result:
