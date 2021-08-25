@@ -23,6 +23,8 @@ import android.widget.Toast;
 import java.util.Date;
 
 public class WalkActivity extends AppCompatActivity implements SensorEventListener {
+
+    private final String TAG = "WalkActivity";
   
     SensorManager sensorManager;
     Sensor stepCountSensor;
@@ -33,8 +35,6 @@ public class WalkActivity extends AppCompatActivity implements SensorEventListen
 
     // 현재 걸음 수
     int currentSteps = 0;
-
-    Intent intent = getIntent();
 
     Date startTime;
     Date endTime;
@@ -82,7 +82,12 @@ public class WalkActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void onClick(View v) {
                 endTime = new Date();
-                long minute = (endTime.getTime() - startTime.getTime())/60000;
+                long minute = (endTime.getTime() - startTime.getTime())/600;
+                Log.d(TAG, String.valueOf(endTime.getTime()));
+                Log.d(TAG, String.valueOf(startTime.getTime()));
+                Log.d(TAG, String.valueOf(minute));
+
+                Intent intent = new Intent();
 
                 intent.putExtra("minute", (int)minute);
                 intent.putExtra("steps", currentSteps);
@@ -111,7 +116,8 @@ public class WalkActivity extends AppCompatActivity implements SensorEventListen
     }
 
     //1000 보 == 100 point
+    //1500 보 == 100 point
     public int StepsToPoint(int currentSteps){
-        return (currentSteps / 1000) * 100;
+        return currentSteps;
     }
 }

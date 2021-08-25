@@ -152,7 +152,7 @@ public class HealthStocksDAO {
         return false;
     }
 
-    protected int getTodayStockId(String username, int date) {
+    public int getTodayStockId(String username, int date) {
         //오늘 날짜에 해당하는 stock이 있는지 보고 있으면 id return, 없으면 만들고 id return
         SQLiteDatabase db = helper.getWritableDatabase();
         cursor = db.rawQuery("select " + HealthStocksDBHelper.COL_ID + " from " + HealthStocksDBHelper.TABLE_STOCKS
