@@ -6,9 +6,10 @@ public class Exercise {
     private int stocksId; // 단위 주가 ID (하루단위)
     private int price;
 
-    public Exercise(int price, int stocksId) {
+    public Exercise(int price, int stocksId, int minute) {
         this.price = price;
         this.stocksId = stocksId;
+        this.minute = minute;
     }
 
     //    public String getKinds() {

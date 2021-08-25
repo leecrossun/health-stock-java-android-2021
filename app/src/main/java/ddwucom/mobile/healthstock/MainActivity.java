@@ -37,6 +37,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import ddwucom.mobile.healthstock.DemoBase;
+import ddwucom.mobile.healthstock.dao.HealthStocksDAO;
 import ddwucom.mobile.healthstock.dto.Exercise;
 import ddwucom.mobile.healthstock.dto.Position;
 import ddwucom.mobile.healthstock.dto.Stocks;
@@ -52,8 +53,8 @@ public class MainActivity extends DemoBase {
     private final int count = 5;
 
     private SQLiteDatabase db;
-    private HealthStocksDBHelper helper;
     private Cursor cursor;
+    private HealthStocksDAO dao;
 
     private ArrayList<Stocks> stocksList = new ArrayList<>();
     private ArrayList<Position> positionList = new ArrayList<>();
@@ -74,8 +75,6 @@ public class MainActivity extends DemoBase {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        helper = new HealthStocksDBHelper(MainActivity.this);
-
         // 프로필 클릭시 사용자 페이지로 이동
         ImageView user = (ImageView) findViewById(R.id.userProfile);
         user.setOnClickListener(new View.OnClickListener() {
@@ -87,11 +86,41 @@ public class MainActivity extends DemoBase {
             }
         });
 
-        // 건강 주식 그래프
         setTitle("CombinedChartActivity");
-        setLists();
+
+        //리스트 설정
+        dao = new HealthStocksDAO(MainActivity.this);
+        stocksList = dao.getAllStocks(userInfo);
+        for (int i = 0; i < count; i++) {
+            int sId = stocksList.get(i).getStocksId();
+
+            Position p = dao.getPosition(sId);
+            if (p != null) {
+                positionList.add(p);
+            } else {
+                positionList.add(new Position(0, sId, 0));
+            }
+
+            Exercise e = dao.getExercise(sId);
+            if (e != null) {
+                exerciseList.add(e);
+            } else {
+                exerciseList.add(new Exercise(0, sId, 0));
+            }
+        }
+
+        //차트 날짜 설정
+        ArrayList<Date> dateList = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            dateList.add(stocksList.get(i).getDate());
+        }
+        initString(dateList);
 
         chart = findViewById(R.id.chart1);
+        drawGraph();
+    }
+
+    protected void drawGraph() {
         chart.getDescription().setEnabled(false);
         chart.setBackgroundColor(Color.WHITE);
         chart.setDrawGridBackground(false);
@@ -224,56 +253,4 @@ public class MainActivity extends DemoBase {
     @Override
     protected void saveToGallery() { /* Intentionally left empty */ }
 
-    protected void setLists() {
-        db = helper.getReadableDatabase();
-        cursor = db.rawQuery("select * from " + HealthStocksDBHelper.TABLE_STOCKS
-                + " where " + HealthStocksDBHelper.COL_USERNAME + "='" + userInfo.getUserName()
-                + "' order by " + HealthStocksDBHelper.COL_ID + " desc limit 5", null);
-
-        while (cursor.moveToNext()) {
-            stocksList.add(new Stocks(
-                    cursor.getInt(cursor.getColumnIndex(HealthStocksDBHelper.COL_ID)),
-                    userInfo,
-                    cursor.getInt(cursor.getColumnIndex(HealthStocksDBHelper.COL_DATE)),
-                    cursor.getInt(cursor.getColumnIndex(HealthStocksDBHelper.COL_SHAREPRICE))
-            ));
-        }
-        Collections.reverse(stocksList);
-
-        // 차트 날짜 설정
-        ArrayList<Date> dateList = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            dateList.add(stocksList.get(i).getDate());
-        }
-        initString(dateList);
-
-        for (int i = 0; i < count; i++) {
-            cursor = db.rawQuery("select * from " + HealthStocksDBHelper.TABLE_HEALTH
-                    + " where " + HealthStocksDBHelper.COL_STOCKSID + "=" + String.valueOf(stocksList.get(i).getStocksId()), null);
-            while (cursor.moveToNext()) {
-                String type = cursor.getString(cursor.getColumnIndex(HealthStocksDBHelper.COL_TYPE));
-                int stocksId = cursor.getInt(cursor.getColumnIndex(HealthStocksDBHelper.COL_STOCKSID));
-                if (type.equals("position")) {
-                    positionList.add(new Position(
-                            cursor.getInt(cursor.getColumnIndex(HealthStocksDBHelper.COL_RESULT)),
-                            stocksId
-                    ));
-                } else if (type.equals("exercise")) {
-                    exerciseList.add(new Exercise(
-                            cursor.getInt(cursor.getColumnIndex(HealthStocksDBHelper.COL_RESULT)),
-                            stocksId
-                    ));
-                }
-            }
-            if (positionList.size() <= i) {
-                positionList.add(new Position(0, stocksList.get(i).getStocksId()));
-            }
-            if (exerciseList.size() <= i) {
-                exerciseList.add(new Exercise(0, stocksList.get(i).getStocksId()));
-            }
-        }
-
-        cursor.close();
-        helper.close();
-    }
 }
