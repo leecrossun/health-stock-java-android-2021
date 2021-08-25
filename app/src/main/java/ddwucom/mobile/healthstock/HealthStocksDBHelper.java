@@ -52,15 +52,15 @@ public class HealthStocksDBHelper extends SQLiteOpenHelper {
                 + "foreign key(" + COL_STOCKSID + ") REFERENCES " + TABLE_STOCKS + "(" + COL_ID + "));");
 
         //샘플 데이터
-        db.execSQL("INSERT INTO " + TABLE_USERINFO + " VALUES ('name1', 5000, 160, 55, 20);");
+        //db.execSQL("INSERT INTO " + TABLE_USERINFO + " VALUES ('name1', 5000, 160, 55, 20);");
         db.execSQL("INSERT INTO " + TABLE_USERINFO + " VALUES ('name2', 6000, 155, 50, 25);");
-        db.execSQL("INSERT INTO " + TABLE_USERINFO + " VALUES ('name3', 7000, 165, 65, 23);");
+       // db.execSQL("INSERT INTO " + TABLE_USERINFO + " VALUES ('name3', 7000, 165, 65, 23);");
 
-        db.execSQL("INSERT INTO " + TABLE_STOCKS + " VALUES (null, 'name1', 210819, 7800);");
+        /*db.execSQL("INSERT INTO " + TABLE_STOCKS + " VALUES (null, 'name1', 210819, 7800);");
         db.execSQL("INSERT INTO " + TABLE_STOCKS + " VALUES (null, 'name1', 210820, 8000);");
         db.execSQL("INSERT INTO " + TABLE_STOCKS + " VALUES (null, 'name1', 210821, 8500);");
         db.execSQL("INSERT INTO " + TABLE_STOCKS + " VALUES (null, 'name1', 210822, 9500);");
-        db.execSQL("INSERT INTO " + TABLE_STOCKS + " VALUES (null, 'name1', 210823, 9800);");
+        db.execSQL("INSERT INTO " + TABLE_STOCKS + " VALUES (null, 'name1', 210823, 9800);");*/
 
         db.execSQL("INSERT INTO " + TABLE_STOCKS + " VALUES (null, 'name2', 210815, 2000);");
         db.execSQL("INSERT INTO " + TABLE_STOCKS + " VALUES (null, 'name2', 210816, 2300);");
@@ -77,7 +77,7 @@ public class HealthStocksDBHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO " + TABLE_HEALTH + " VALUES (null, 'position', 10, 100, 5);");
         db.execSQL("INSERT INTO " + TABLE_HEALTH + " VALUES (null, 'exercise', 35, 200, 5);");
 
-        db.execSQL("INSERT INTO " + TABLE_HEALTH + " VALUES (null, 'position', 40, 800, 6);");
+       /*db.execSQL("INSERT INTO " + TABLE_HEALTH + " VALUES (null, 'position', 40, 800, 6);");
         db.execSQL("INSERT INTO " + TABLE_HEALTH + " VALUES (null, 'exercise', 40, 500, 6);");
         db.execSQL("INSERT INTO " + TABLE_HEALTH + " VALUES (null, 'position', 35, 400, 7);");
         db.execSQL("INSERT INTO " + TABLE_HEALTH + " VALUES (null, 'exercise', 45, 300, 7);");
@@ -86,7 +86,7 @@ public class HealthStocksDBHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO " + TABLE_HEALTH + " VALUES (null, 'position', 40, 1200, 9);");
         db.execSQL("INSERT INTO " + TABLE_HEALTH + " VALUES (null, 'exercise', 10, 500, 9);");
         db.execSQL("INSERT INTO " + TABLE_HEALTH + " VALUES (null, 'position', 20, 300, 10);");
-        db.execSQL("INSERT INTO " + TABLE_HEALTH + " VALUES (null, 'exercise', 40, 1000, 10);");
+        db.execSQL("INSERT INTO " + TABLE_HEALTH + " VALUES (null, 'exercise', 40, 1000, 10);");*/
 
     }
 

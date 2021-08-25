@@ -53,6 +53,7 @@ import java.util.Collections;
 import java.util.Date;
 
 public class MainActivity extends DemoBase {
+    private String TAG = "MainActivity";
 
     private CombinedChart chart;
     private final int count = 5;
@@ -159,7 +160,8 @@ public class MainActivity extends DemoBase {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setAxisMinimum(0f);
         xAxis.setGranularity(1f);
-        xAxis.setValueFormatter(new ValueFormatter() {
+        xAxis.setValueFormatter(new ValueFormatter
+                () {
             @Override
             public String getFormattedValue(float value) {
                 Log.d("CombinedChartActivity", "Value: " + value);
@@ -267,46 +269,50 @@ public class MainActivity extends DemoBase {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         switch (requestCode){
             case Walk_Result:
-                if (requestCode == RESULT_OK){
+                if (resultCode == RESULT_OK){
                     int steps = data.getExtras().getInt("steps");
                     int steps_to_point = data.getExtras().getInt("steps_to_point");
                     int minute = data.getExtras().getInt("minute");
 
+                    Log.d(TAG, "dialog");
+
                     // dialog
                     String walk_msg = "총 [ " + steps + " ] 걸음으로 건강주식이 [ " + steps_to_point + " ] 원 상승하였습니다.";
                     builder.setMessage(walk_msg)
-                            .setTitle("운동 측정 결과");
+                            .setTitle("운동 측정 결과")
+                            .show();
 
-                    builder.create();
 
+                    Log.d(TAG, "db");
                     //db에 걸음수 저장
                     Calendar cal = Calendar.getInstance();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
                     int date = Integer.parseInt(sdf.format(cal.getTime()));
                     int stocksId = dao.getTodayStockId(userInfo.getUserName(), date);
-                    Exercise exercise = new Exercise(steps_to_point, stocksId, minute);
+
+                    Exercise exercise = dao.getExercise(stocksId);
+                    Exercise new_exercise = new Exercise(steps_to_point + exercise.getPrice(), stocksId, minute + exercise.getMinute());
+                    dao.saveOrUpdate(new_exercise);
                 }
                 break;
             case Position_Result:
-                if (requestCode == RESULT_OK){
+                if (resultCode == RESULT_OK){
                     int position_to_point = data.getExtras().getInt("position");
                     int minute = data.getExtras().getInt("minute");
 
                     // dialog
                     String walk_msg = "건강주식이 [ " + position_to_point + " ] 원 상승하였습니다.";
                     builder.setMessage(walk_msg)
-                            .setTitle("운동 측정 결과");
+                            .setTitle("운동 측정 결과")
+                            .show();
 
-                    builder.create();
                     //db에 데이터 저장
-
                     Calendar cal = Calendar.getInstance();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
                     int date = Integer.parseInt(sdf.format(cal.getTime()));
                     int stocksId = dao.getTodayStockId(userInfo.getUserName(), date);
                     Position position = new Position(position_to_point, stocksId, minute);
-
-                    dao.saveOrUpdate(stocksId,position);
+                    dao.saveOrUpdate(position);
 
                 }
                 break;
