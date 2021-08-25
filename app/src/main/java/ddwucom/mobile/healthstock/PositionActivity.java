@@ -100,6 +100,8 @@ public class PositionActivity extends AppCompatActivity {
                     }).start();
                     Log.d("socket", "input: " + data);
 
+                    saveOrUpdate(data);
+
                     OutputStream out = socket.getOutputStream();
                     PrintWriter writer = new PrintWriter(out, true);
                     writer.println("server send");
@@ -111,6 +113,19 @@ public class PositionActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    protected void saveOrUpdate(String data) {
+        db = helper.getWritableDatabase();
+        //stocks에 오늘 거가 있는지 보고 있으면 바로 id return 없으면 생성 후에 id return
+        //id를 가지고 health에 있는지 보고 있으면 update, 없으면 생성 (position인지 exercise인지도 봐야함)
+//        cursor = db.rawQuery("select * from " + HealthStocksDBHelper.TABLE_STOCKS )
+        int id = getStocksId();
+    }
+
+    protected int getStocksId() {
+        int id = 0;
+        return id;
     }
 
     @Override
