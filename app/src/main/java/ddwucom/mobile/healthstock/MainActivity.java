@@ -30,6 +30,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.Utils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -59,6 +60,9 @@ public class MainActivity extends DemoBase {
     private ArrayList<Position> positionList = new ArrayList<>();
     private ArrayList<Exercise> exerciseList = new ArrayList<>();
     private UserInfo userInfo = new UserInfo("name2", 500, 155, 50);
+
+    private final int Walk_Result = 100;
+    private final int Position_Result = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,12 +151,12 @@ public class MainActivity extends DemoBase {
             case R.id.btn_heart:
                 Toast.makeText(MainActivity.this,"걸음 측정화면으로 이동합니다.", Toast.LENGTH_SHORT).show();
                 Intent walk_intent = new Intent(MainActivity.this, WalkActivity.class);
-                startActivity(walk_intent);
+                startActivityForResult(walk_intent, Walk_Result);
                 break;
             case R.id.btn_position:
                 Toast.makeText(MainActivity.this,"자세 측정화면으로 이동합니다.", Toast.LENGTH_SHORT).show();
                 Intent position_intent = new Intent(MainActivity.this, PositionActivity.class);
-                startActivity(position_intent);
+                startActivityForResult(position_intent, Position_Result);
                 break;
         }
     }
@@ -275,5 +279,22 @@ public class MainActivity extends DemoBase {
 
         cursor.close();
         helper.close();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case Walk_Result:
+                if (requestCode == RESULT_OK){
+                    //db에 걸음수 저장
+                }
+                break;
+            case Position_Result:
+                if (requestCode == RESULT_OK){
+                    //db에 데이터 저장
+                }
+                break;
+        }
     }
 }
