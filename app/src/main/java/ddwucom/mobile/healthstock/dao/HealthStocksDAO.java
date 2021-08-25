@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import ddwucom.mobile.healthstock.HealthStocksDBHelper;
+import ddwucom.mobile.healthstock.UserActivity;
 import ddwucom.mobile.healthstock.dto.Exercise;
 import ddwucom.mobile.healthstock.dto.Position;
 import ddwucom.mobile.healthstock.dto.Stocks;
@@ -23,18 +24,38 @@ public class HealthStocksDAO {
 
     public HealthStocksDAO(Context context) { helper = new HealthStocksDBHelper(context); }
 
+    //userinfo 반환
+    public UserInfo getUserInfo(String userName) {
+        UserInfo userInfo = null;
+        SQLiteDatabase db = helper.getReadableDatabase();
+        cursor = db.rawQuery("select * from " + HealthStocksDBHelper.TABLE_USERINFO
+                + " where " + HealthStocksDBHelper.COL_USERNAME + "=" + userName, null);
+
+        if (cursor.moveToNext()) {
+            userInfo = new UserInfo(
+                    userName,
+                    cursor.getInt(cursor.getColumnIndex(HealthStocksDBHelper.COL_POINT)),
+                    cursor.getInt(cursor.getColumnIndex(HealthStocksDBHelper.COL_HEIGHT)),
+                    cursor.getInt(cursor.getColumnIndex(HealthStocksDBHelper.COL_WEIGHT))
+            );
+        }
+        cursor.close();
+        helper.close();
+        return userInfo;
+    }
+
     //stock list 반환
-    public ArrayList<Stocks> getAllStocks(UserInfo userInfo) {
+    public ArrayList<Stocks> getAllStocks(String userName) {
         ArrayList<Stocks> stocksList = new ArrayList<>();
         SQLiteDatabase db = helper.getReadableDatabase();
         cursor = db.rawQuery("select * from " + HealthStocksDBHelper.TABLE_STOCKS
-                + " where " + HealthStocksDBHelper.COL_USERNAME + "='" + userInfo.getUserName()
+                + " where " + HealthStocksDBHelper.COL_USERNAME + "='" + userName
                 + "' order by " + HealthStocksDBHelper.COL_ID + " desc limit 5", null);
 
         while (cursor.moveToNext()) {
             stocksList.add(new Stocks(
                     cursor.getInt(cursor.getColumnIndex(HealthStocksDBHelper.COL_ID)),
-                    userInfo,
+                    userName,
                     cursor.getInt(cursor.getColumnIndex(HealthStocksDBHelper.COL_DATE)),
                     cursor.getInt(cursor.getColumnIndex(HealthStocksDBHelper.COL_SHAREPRICE))
             ));
@@ -46,13 +67,34 @@ public class HealthStocksDAO {
         return stocksList;
     }
 
+    //stock 반환
+    public Stocks getStocks(int id) {
+        Stocks stocks = null;
+        SQLiteDatabase db = helper.getReadableDatabase();
+        cursor = db.rawQuery("select * from " + HealthStocksDBHelper.TABLE_STOCKS
+                + " where " + HealthStocksDBHelper.COL_ID + "=" + id, null);
+
+        if (cursor.moveToNext()) {
+            stocks = new Stocks(
+                    id,
+                    cursor.getString(cursor.getColumnIndex(HealthStocksDBHelper.COL_DATE)),
+                    cursor.getInt(cursor.getColumnIndex(HealthStocksDBHelper.COL_DATE)),
+                    cursor.getInt(cursor.getColumnIndex(HealthStocksDBHelper.COL_SHAREPRICE))
+            );
+        }
+
+        cursor.close();
+        helper.close();
+        return stocks;
+    }
+
     //position 반환
     public Position getPosition(int sId) {
         Position position = null;
         SQLiteDatabase db = helper.getReadableDatabase();
 
         cursor = db.rawQuery("select * from " + HealthStocksDBHelper.TABLE_HEALTH
-                + " where " + HealthStocksDBHelper.COL_STOCKSID + "=" + String.valueOf(sId), null);
+                + " where " + HealthStocksDBHelper.COL_STOCKSID + "=" + sId, null);
         while (cursor.moveToNext()) {
             String type = cursor.getString(cursor.getColumnIndex(HealthStocksDBHelper.COL_TYPE));
             int stocksId = cursor.getInt(cursor.getColumnIndex(HealthStocksDBHelper.COL_STOCKSID));
@@ -94,7 +136,7 @@ public class HealthStocksDAO {
         return exercise;
     }
 
-    public boolean saveOrUpdate(Position position) {
+    public boolean saveOrUpdate(Position position, int point) {
         // stock id && type에 해당하는 health가 있는지 보고 있으면 update 없으면 새로 save
         SQLiteDatabase db = helper.getWritableDatabase();
         cursor = db.rawQuery("select * from " + HealthStocksDBHelper.TABLE_HEALTH
@@ -119,11 +161,14 @@ public class HealthStocksDAO {
 
         helper.close();
         cursor.close();
-        if (count > 0 || result > 0) return true;
+        if (count > 0 || result > 0) {
+            updateStock(getStocks(position.getStockId()), point);
+            return true;
+        }
         return false;
     }
 
-    public boolean saveOrUpdate(Exercise exercise) {
+    public boolean saveOrUpdate(Exercise exercise, int step_to_point) {
         // stock id && type에 해당하는 health가 있는지 보고 있으면 update 없으면 새로 save
         SQLiteDatabase db = helper.getWritableDatabase();
         cursor = db.rawQuery("select * from " + HealthStocksDBHelper.TABLE_HEALTH
@@ -148,7 +193,24 @@ public class HealthStocksDAO {
 
         helper.close();
         cursor.close();
-        if (count > 0 || result > 0) return true;
+        if (count > 0 || result > 0) {
+            updateStock(getStocks(exercise.getStocksId()), step_to_point);
+            return true;
+        }
+        return false;
+    }
+
+    //stock을 udpate하는데 result에 exercise.getPrice()를 더해서 update
+    public boolean updateStock(Stocks stocks, int point) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+        ContentValues value = new ContentValues();
+        value.put(HealthStocksDBHelper.COL_SHAREPRICE, stocks.getSharePrice() + point);
+
+        String whereClause = HealthStocksDBHelper.COL_ID + "=?";
+        String[] whereArgs = new String[] {String.valueOf(stocks.getStocksId())};
+        int result = db.update(HealthStocksDBHelper.TABLE_STOCKS, value, whereClause, whereArgs);
+        helper.close();
+        if (result > 0) return true;
         return false;
     }
 

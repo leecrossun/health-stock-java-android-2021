@@ -7,11 +7,11 @@ import java.util.logging.SimpleFormatter;
 
 public class Stocks {
     private int stocksId;
-    private UserInfo userName;
+    private String userName;
     private int sharePrice;
     private Date date;
 
-    public Stocks(int stocksId, UserInfo userName, int date, int sharePrice) {
+    public Stocks(int stocksId, String userName, int date, int sharePrice) {
         this.stocksId = stocksId;
         this.userName = userName;
         this.sharePrice = sharePrice;
@@ -49,11 +49,11 @@ public class Stocks {
         this.date = date;
     }
 
-    public UserInfo getUserName() {
+    public String getUserName() {
         return userName;
     }
 
-    public void setUserName(UserInfo userName) {
+    public void setUserName(String userName) {
         this.userName = userName;
     }
 }
