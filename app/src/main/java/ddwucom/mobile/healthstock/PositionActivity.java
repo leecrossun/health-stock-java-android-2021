@@ -51,7 +51,6 @@ public class PositionActivity extends AppCompatActivity {
     protected void saveOrUpdate() {
         // 오늘 날짜에 해당하는 stock이 있는지 보고 있으면 id return, 없으면 만들고 id return
         // stock id && type에 해당하는 health가 있는지 보고 있으면 update 없으면 새로 save
-        int stockId = getTodayStockId();
     }
 
     protected int getTodayStockId(int date) {
