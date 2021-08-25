@@ -38,12 +38,31 @@ public class PositionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_position);
+
         //socket 통신
         toggleButton = findViewById(R.id.togglePosition);
         textView = findViewById(R.id.data);
         handler = new Handler();
 
+        //db
         helper = new HealthStocksDBHelper(PositionActivity.this);
+    }
+    
+    protected void saveOrUpdate() {
+        // 오늘 날짜에 해당하는 stock이 있는지 보고 있으면 id return, 없으면 만들고 id return
+        // stock id && type에 해당하는 health가 있는지 보고 있으면 update 없으면 새로 save
+        int stockId = getTodayStockId();
+    }
+
+    protected int getTodayStockId(int date) {
+        int id = 0;
+        db = helper.getReadableDatabase();
+        cursor = db.rawQuery("select * from " + HealthStocksDBHelper.TABLE_STOCKS
+                + " where " + HealthStocksDBHelper.COL_DATE + "=" + date, null);
+
+
+
+        return id;
     }
 
     class ServerThread extends Thread {
