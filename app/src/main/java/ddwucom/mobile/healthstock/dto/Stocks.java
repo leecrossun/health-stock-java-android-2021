@@ -1,12 +1,29 @@
 package ddwucom.mobile.healthstock.dto;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.SimpleFormatter;
 
 public class Stocks {
     private int stocksId;
+    private UserInfo userName;
     private int sharePrice;
     private Date date;
-    private UserInfo userName;
+
+    public Stocks(int stocksId, UserInfo userName, int date, int sharePrice) {
+        this.stocksId = stocksId;
+        this.userName = userName;
+        this.sharePrice = sharePrice;
+
+        String d = String.valueOf(date);
+        SimpleDateFormat format = new SimpleDateFormat("yyMMdd");
+        try {
+            this.date = new Date(format.parse(d).getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
 
     public int getStocksId() {
         return stocksId;

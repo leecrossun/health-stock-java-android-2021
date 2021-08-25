@@ -1,82 +1,95 @@
 package ddwucom.mobile.healthstock;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 public class WalkActivity extends AppCompatActivity implements SensorEventListener {
 
-    private SensorManager sensorManager;
-    private Sensor stepCountSensor;
-    TextView tvStepCount;
-    float count = 0;
-    static String TAG = "test";
 
+public class WalkActivity extends AppCompatActivity implements SensorEventListener {
+  
+    SensorManager sensorManager;
+    Sensor stepCountSensor;
+    TextView stepCountView;
+
+    Button startButton;
+    Button stopButton;
+
+    // 현재 걸음 수
+    int currentSteps = 0;
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_walk);
 
-        tvStepCount = (TextView)findViewById(R.id.tvStepCount);
-        sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+        stepCountView = findViewById(R.id.stepCountView);
+
+        startButton = findViewById(R.id.btn_start);
+        stopButton = findViewById(R.id.btn_stop);
+
+        // 활동 퍼미션 체크
+        if(ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_DENIED){
+
+            requestPermissions(new String[]{Manifest.permission.ACTIVITY_RECOGNITION}, 0);
+        }
+
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         stepCountSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
-        if(stepCountSensor == null) {
-            Log.d(TAG,"oncreate if문 안");
-            Toast.makeText(this, "No Step Detect Sensor", Toast.LENGTH_SHORT).show();
-        }
-        Log.d(TAG,"oncreate if문 밖");
-    }
 
-
-    public void onClick(View v){
-        switch (v.getId()){
-            case R.id.btnStart:
-                sensorManager.registerListener(this, stepCountSensor, SensorManager.SENSOR_DELAY_NORMAL);
-                Log.d(TAG,"onclick 내부");
-                Toast.makeText(this,"걸음 측정 시작",Toast.LENGTH_SHORT).show();
-                break;
+        // 디바이스에 걸음 센서의 존재 여부 체크
+        if (stepCountSensor == null) {
+            Toast.makeText(this, "No Step Sensor", Toast.LENGTH_SHORT).show();
         }
 
-    }
+        // 시작 버튼
+        startButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(stepCountSensor !=null) {
+                    Toast.makeText(WalkActivity.this,"걸음 측정 시작",Toast.LENGTH_SHORT).show();
+                    sensorManager.registerListener(WalkActivity.this,stepCountSensor,SensorManager.SENSOR_DELAY_FASTEST);
+                }
+            }
+        });
 
-    @Override
-    protected void onResume() {
-        Log.d(TAG,"onresume 안");
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d(TAG,"onpause 안");
-        sensorManager.unregisterListener(this);
+        // 스탑 버튼
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if(event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
-        Log.d(TAG,"onSensorChanged if문 안");
-        float val = event.values[0];
-        Toast.makeText(this, String.valueOf(event.values[0]) + "-" + String.valueOf(count),Toast.LENGTH_SHORT).show();
-        if (count == 0) {
-            count = val;
-            Log.d(TAG,"count == 0 if문");
-            tvStepCount.setText("Step Count : " + String.valueOf(val-count+1));
-        }
-        else {
-            Log.d(TAG,"count != 0 if문");
-            tvStepCount.setText("Step Count : " + String.valueOf(val-count+1));
-        }
+        // 걸음 센서 이벤트 발생시
+        if(event.sensor.getType() == Sensor.TYPE_STEP_DETECTOR){
+
+            if(event.values[0]==1.0f){
+                // 센서 이벤트가 발생할때 마다 걸음수 증가
+                currentSteps++;
+                stepCountView.setText(String.valueOf(currentSteps));
+            }
         }
         Log.d(TAG,String.valueOf(event.values[0])+" 값, "+event.sensor.getName()+" 센서");
     }
