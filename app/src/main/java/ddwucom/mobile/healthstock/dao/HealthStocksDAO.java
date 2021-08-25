@@ -42,17 +42,9 @@ public class HealthStocksDAO {
     }
 
     //position list 반환
-    public ArrayList<Position> getAllPositions(){
-        ArrayList<Position> positions = new ArrayList<>();
-        return positions;
-    }
 
 
     //exercise list 반환
-    public ArrayList<Exercise> getAllExercises(){
-        ArrayList<Exercise> exercises = new ArrayList<>();
-        return exercises;
-    }
 
 
     //오늘 날짜에 해당하는 stock이 있는지 보고 있으면 id return, 없으면 만들고 id return

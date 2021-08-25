@@ -292,6 +292,7 @@ public class MainActivity extends DemoBase {
                 if (requestCode == RESULT_OK){
                     int steps = data.getExtras().getInt("steps");
                     int steps_to_point = data.getExtras().getInt("steps_to_point");
+                    int minute = data.getExtras().getInt("minute");
 
                     // dialog
                     String walk_msg = "총 [ " + steps + " ] 걸음으로 건강주식이 [ " + steps_to_point + " ] 원 상승하였습니다.";
@@ -304,6 +305,7 @@ public class MainActivity extends DemoBase {
             case Position_Result:
                 if (requestCode == RESULT_OK){
                     int position_to_point = data.getExtras().getInt("position");
+                    int minute = data.getExtras().getInt("minute");
 
                     // dialog
                     String walk_msg = "건강주식이 [ " + position_to_point + " ] 원 상승하였습니다.";
