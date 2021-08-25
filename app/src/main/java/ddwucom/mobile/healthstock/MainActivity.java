@@ -46,7 +46,9 @@ import ddwucom.mobile.healthstock.dto.Position;
 import ddwucom.mobile.healthstock.dto.Stocks;
 import ddwucom.mobile.healthstock.dto.UserInfo;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 
@@ -275,7 +277,14 @@ public class MainActivity extends DemoBase {
                     builder.setMessage(walk_msg)
                             .setTitle("운동 측정 결과");
 
+                    builder.create();
+
                     //db에 걸음수 저장
+                    Calendar cal = Calendar.getInstance();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
+                    int date = Integer.parseInt(sdf.format(cal.getTime()));
+                    int stocksId = dao.getTodayStockId(userInfo.getUserName(), date);
+                    Exercise exercise = new Exercise(steps_to_point, stocksId, minute);
                 }
                 break;
             case Position_Result:
@@ -287,7 +296,17 @@ public class MainActivity extends DemoBase {
                     String walk_msg = "건강주식이 [ " + position_to_point + " ] 원 상승하였습니다.";
                     builder.setMessage(walk_msg)
                             .setTitle("운동 측정 결과");
+
+                    builder.create();
                     //db에 데이터 저장
+
+                    Calendar cal = Calendar.getInstance();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
+                    int date = Integer.parseInt(sdf.format(cal.getTime()));
+                    int stocksId = dao.getTodayStockId(userInfo.getUserName(), date);
+                    Position position = new Position(position_to_point, stocksId, minute);
+
+                    dao.saveOrUpdate(stocksId,position);
 
                 }
                 break;
