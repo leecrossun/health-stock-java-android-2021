@@ -72,6 +72,7 @@ public class WalkActivity extends AppCompatActivity implements SensorEventListen
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int
                 finish();
             }
         });
