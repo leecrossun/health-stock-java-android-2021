@@ -1,5 +1,7 @@
 package ddwucom.mobile.healthstock;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -284,15 +286,31 @@ public class MainActivity extends DemoBase {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         switch (requestCode){
             case Walk_Result:
                 if (requestCode == RESULT_OK){
+                    int steps = data.getExtras().getInt("steps");
+                    int steps_to_point = data.getExtras().getInt("steps_to_point");
+
+                    // dialog
+                    String walk_msg = "총 [ " + steps + " ] 걸음으로 건강주식이 [ " + steps_to_point + " ] 원 상승하였습니다.";
+                    builder.setMessage(walk_msg)
+                            .setTitle("운동 측정 결과");
+
                     //db에 걸음수 저장
                 }
                 break;
             case Position_Result:
                 if (requestCode == RESULT_OK){
+                    int position_to_point = data.getExtras().getInt("position");
+
+                    // dialog
+                    String walk_msg = "건강주식이 [ " + position_to_point + " ] 원 상승하였습니다.";
+                    builder.setMessage(walk_msg)
+                            .setTitle("운동 측정 결과");
                     //db에 데이터 저장
+
                 }
                 break;
         }

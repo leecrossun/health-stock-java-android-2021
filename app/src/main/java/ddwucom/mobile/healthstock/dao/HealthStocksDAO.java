@@ -4,10 +4,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 
 import ddwucom.mobile.healthstock.HealthStocksDBHelper;
+import ddwucom.mobile.healthstock.dto.Exercise;
+import ddwucom.mobile.healthstock.dto.Position;
 import ddwucom.mobile.healthstock.dto.Stocks;
 import ddwucom.mobile.healthstock.dto.UserInfo;
 
@@ -39,12 +42,21 @@ public class HealthStocksDAO {
     }
 
     //position list 반환
+    public ArrayList<Position> getAllPositions(){
+        ArrayList<Position> positions = new ArrayList<>();
+        return positions;
+    }
 
 
     //exercise list 반환
+    public ArrayList<Exercise> getAllExercises(){
+        ArrayList<Exercise> exercises = new ArrayList<>();
+        return exercises;
+    }
 
 
     //오늘 날짜에 해당하는 stock이 있는지 보고 있으면 id return, 없으면 만들고 id return
+
 
 
     //가장 최근 stock의 shareprice 반환
