@@ -95,7 +95,7 @@ public class HealthStocksDAO {
 
         cursor = db.rawQuery("select * from " + HealthStocksDBHelper.TABLE_HEALTH
                 + " where " + HealthStocksDBHelper.COL_STOCKSID + "=" + sId, null);
-        while (cursor.moveToNext()) {
+        if (cursor.moveToNext()) {
             String type = cursor.getString(cursor.getColumnIndex(HealthStocksDBHelper.COL_TYPE));
             int stocksId = cursor.getInt(cursor.getColumnIndex(HealthStocksDBHelper.COL_STOCKSID));
             if (type.equals("position")) {
@@ -105,6 +105,9 @@ public class HealthStocksDAO {
                         cursor.getInt(cursor.getColumnIndex(HealthStocksDBHelper.COL_MINUTE))
                 );
             }
+        }
+        else {
+            position = new Position(0, sId, 0);
         }
 
         cursor.close();
@@ -119,7 +122,7 @@ public class HealthStocksDAO {
 
         cursor = db.rawQuery("select * from " + HealthStocksDBHelper.TABLE_HEALTH
                 + " where " + HealthStocksDBHelper.COL_STOCKSID + "=" + String.valueOf(sId), null);
-        while (cursor.moveToNext()) {
+        if (cursor.moveToNext()) {
             String type = cursor.getString(cursor.getColumnIndex(HealthStocksDBHelper.COL_TYPE));
             int stocksId = cursor.getInt(cursor.getColumnIndex(HealthStocksDBHelper.COL_STOCKSID));
             if (type.equals("exercise")) {
@@ -129,6 +132,9 @@ public class HealthStocksDAO {
                         cursor.getInt(cursor.getColumnIndex(HealthStocksDBHelper.COL_MINUTE))
                 );
             }
+        }
+        else {
+            exercise = new Exercise(0, sId, 0);
         }
 
         cursor.close();

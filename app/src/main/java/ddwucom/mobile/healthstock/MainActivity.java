@@ -312,7 +312,7 @@ public class MainActivity extends DemoBase {
                     int date = Integer.parseInt(sdf.format(cal.getTime()));
                     int stocksId = dao.getTodayStockId(userInfo.getUserName(), date);
                     Position position = new Position(position_to_point, stocksId, minute);
-                    dao.saveOrUpdate(position);
+                    dao.saveOrUpdate(position, position_to_point);
 
                 }
                 break;
