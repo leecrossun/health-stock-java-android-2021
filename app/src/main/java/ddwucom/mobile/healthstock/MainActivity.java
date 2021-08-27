@@ -53,6 +53,9 @@ import java.util.Collections;
 import java.util.Date;
 
 public class MainActivity extends DemoBase {
+    private TextView myStock;
+    private TextView userName;
+
     private String TAG = "MainActivity";
 
     private CombinedChart chart;
@@ -63,8 +66,8 @@ public class MainActivity extends DemoBase {
     private HealthStocksDAO dao;
 
     private ArrayList<Stocks> stocksList = new ArrayList<>();
-    private ArrayList<Position> positionList = new ArrayList<>();
-    private ArrayList<Exercise> exerciseList = new ArrayList<>();
+    private ArrayList<Position> positionList = null;
+    private ArrayList<Exercise> exerciseList = null;
     private UserInfo userInfo = new UserInfo("name2", 500, 155, 50);
 
     private final int Walk_Result = 100;
@@ -95,11 +98,24 @@ public class MainActivity extends DemoBase {
             }
         });
 
+        myStock = (TextView)findViewById(R.id.myStock);
+        userName = (TextView)findViewById(R.id.main_userName);
+
         setTitle("CombinedChartActivity");
 
         //리스트 설정
         dao = new HealthStocksDAO(MainActivity.this);
+//        setLists();
+
+        chart = findViewById(R.id.chart1);
+//        drawGraph();
+    }
+
+    protected void setLists() {
         stocksList = dao.getAllStocks(userInfo.getUserName());
+        exerciseList = new ArrayList<>();
+        positionList = new ArrayList<>();
+        
         for (int i = 0; i < count; i++) {
             int sId = stocksList.get(i).getStocksId();
 
@@ -124,9 +140,6 @@ public class MainActivity extends DemoBase {
             dateList.add(stocksList.get(i).getDate());
         }
         initString(dateList);
-
-        chart = findViewById(R.id.chart1);
-        drawGraph();
     }
 
     protected void drawGraph() {
@@ -311,11 +324,23 @@ public class MainActivity extends DemoBase {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
                     int date = Integer.parseInt(sdf.format(cal.getTime()));
                     int stocksId = dao.getTodayStockId(userInfo.getUserName(), date);
-                    Position position = new Position(position_to_point, stocksId, minute);
-                    dao.saveOrUpdate(position, position_to_point);
+
+                    Position position = dao.getPosition(stocksId);
+                    Position new_position = new Position(position_to_point + position.getPrice(), stocksId, minute + position.getMinute());
+                    dao.saveOrUpdate(new_position, position_to_point);
 
                 }
                 break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setLists();
+        drawGraph();
+        myStock.setText(stocksList.get(count-1).getSharePrice() + "원");
+        userName.setText(userInfo.getUserName());
+
     }
 }
