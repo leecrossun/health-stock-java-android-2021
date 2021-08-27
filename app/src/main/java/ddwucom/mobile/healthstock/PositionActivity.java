@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,12 +29,14 @@ public class PositionActivity extends AppCompatActivity {
     Intent intent;
     ToggleButton toggleButton;
     TextView textView;
+    TextView positionText;
     Socket socket;
     Handler handler;
 
     private SQLiteDatabase db;
     private HealthStocksDBHelper helper;
     private Cursor cursor;
+    private int past = 0;
 
     Date startTime;
     Date endTime;
@@ -46,6 +49,7 @@ public class PositionActivity extends AppCompatActivity {
         //socket 통신
         toggleButton = findViewById(R.id.togglePosition);
         textView = findViewById(R.id.data);
+        positionText = findViewById(R.id.positionText);
         handler = new Handler();
         intent = getIntent();
     }
@@ -70,6 +74,7 @@ public class PositionActivity extends AppCompatActivity {
 
                     byte[] byteArr = new byte[100];
                     int readByteCount = input.read(byteArr);
+                    //데이터 받아오기
                     String data = new String(byteArr, 0, readByteCount, "UTF-8");
                     //결과값 띄워주기
                     new Thread(new Runnable() {
@@ -78,7 +83,12 @@ public class PositionActivity extends AppCompatActivity {
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    textView.setText(data);// Todo: 여기에 UI 작업할 코드를 입력하시면 됩니다.
+                                    textView.setText(data+"점");
+                                    if (past < Integer.parseInt(data))
+                                        positionText.setText("자세가 바릅니다.");// Todo: 여기에 UI 작업할 코드를 입력하시면 됩니다.
+                                    else
+                                        positionText.setText("자세가 바르지 않습니다. 자세를 바르게 해주세요.");
+                                    past = Integer.parseInt(data);
                                 }
                             });
                         }
