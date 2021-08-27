@@ -120,18 +120,10 @@ public class MainActivity extends DemoBase {
             int sId = stocksList.get(i).getStocksId();
 
             Position p = dao.getPosition(sId);
-            if (p != null) {
-                positionList.add(p);
-            } else {
-                positionList.add(new Position(0, sId, 0));
-            }
+            positionList.add(p);
 
             Exercise e = dao.getExercise(sId);
-            if (e != null) {
-                exerciseList.add(e);
-            } else {
-                exerciseList.add(new Exercise(0, sId, 0));
-            }
+            exerciseList.add(e);
         }
 
         //차트 날짜 설정

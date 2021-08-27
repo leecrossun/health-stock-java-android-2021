@@ -87,7 +87,7 @@ public class PositionActivity extends AppCompatActivity {
                                     if (past < Integer.parseInt(data))
                                         positionText.setText("자세가 바릅니다.");// Todo: 여기에 UI 작업할 코드를 입력하시면 됩니다.
                                     else
-                                        positionText.setText("자세가 바르지 않습니다. 자세를 바르게 해주세요.");
+                                        positionText.setText("자세가 바르지 않습니다.\n자세를 바르게 해주세요.");
                                     past = Integer.parseInt(data);
                                 }
                             });

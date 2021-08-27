@@ -94,7 +94,8 @@ public class HealthStocksDAO {
         SQLiteDatabase db = helper.getReadableDatabase();
 
         cursor = db.rawQuery("select * from " + HealthStocksDBHelper.TABLE_HEALTH
-                + " where " + HealthStocksDBHelper.COL_STOCKSID + "=" + sId, null);
+                + " where " + HealthStocksDBHelper.COL_STOCKSID + "=" + sId
+                + " and " + HealthStocksDBHelper.COL_TYPE + "='position'", null);
         if (cursor.moveToNext()) {
             String type = cursor.getString(cursor.getColumnIndex(HealthStocksDBHelper.COL_TYPE));
             int stocksId = cursor.getInt(cursor.getColumnIndex(HealthStocksDBHelper.COL_STOCKSID));
@@ -121,7 +122,8 @@ public class HealthStocksDAO {
         SQLiteDatabase db = helper.getReadableDatabase();
 
         cursor = db.rawQuery("select * from " + HealthStocksDBHelper.TABLE_HEALTH
-                + " where " + HealthStocksDBHelper.COL_STOCKSID + "=" + String.valueOf(sId), null);
+                + " where " + HealthStocksDBHelper.COL_STOCKSID + "=" + String.valueOf(sId)
+                + " and " + HealthStocksDBHelper.COL_TYPE + "='exercise'", null);
         if (cursor.moveToNext()) {
             String type = cursor.getString(cursor.getColumnIndex(HealthStocksDBHelper.COL_TYPE));
             int stocksId = cursor.getInt(cursor.getColumnIndex(HealthStocksDBHelper.COL_STOCKSID));
