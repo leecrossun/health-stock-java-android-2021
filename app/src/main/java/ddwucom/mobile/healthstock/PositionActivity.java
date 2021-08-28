@@ -83,7 +83,7 @@ public class PositionActivity extends AppCompatActivity {
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    textView.setText(data+"점");
+                                    textView.setText(data);
                                     if (past < Integer.parseInt(data))
                                         positionText.setText("자세가 바릅니다.");// Todo: 여기에 UI 작업할 코드를 입력하시면 됩니다.
                                     else
