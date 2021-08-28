@@ -94,6 +94,10 @@ public class MainActivity extends DemoBase {
             public void onClick(View view) {
                 Toast.makeText(MainActivity.this,"사용자 화면으로 이동합니다.", Toast.LENGTH_SHORT).show();
                 Intent userIntent = new Intent(MainActivity.this, UserActivity.class);
+                userIntent.putExtra("position", String.valueOf(positionList.get(count-1).getPrice()));
+                userIntent.putExtra("exercise", String.valueOf(exerciseList.get(count-1).getPrice()));
+                userIntent.putExtra("userName", userName.getText().toString());
+                userIntent.putExtra("stock", myStock.getText().toString());
                 startActivity(userIntent);
             }
         });
